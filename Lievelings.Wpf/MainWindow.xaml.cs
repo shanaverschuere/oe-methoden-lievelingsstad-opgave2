@@ -34,12 +34,7 @@ namespace Lievelings.Wpf
             beginVanDeZin = BeginNed;
         }
 
-        private void VerbergKnoppen()
-        {
-            btnEn.Visibility = Visibility.Hidden;
-            btnNl.Visibility = Visibility.Hidden;
-        }
-
+        
         private void VulLstSteden()
         {
             lstSteden.Items.Add("Antwerpen");
@@ -49,13 +44,7 @@ namespace Lievelings.Wpf
             lstSteden.Items.Add("Hasselt");
         }
 
-        private void ToonKnoppen()
-        {
-            btnEn.Visibility = Visibility.Visible;
-            btnNl.Visibility = Visibility.Visible;
-        }
-
-        private void ToonEngelstaligeOpschriften()
+                private void ToonEngelstaligeOpschriften()
         {
             beginVanDeZin = BeginEng;
 
@@ -73,14 +62,28 @@ namespace Lievelings.Wpf
             Title = TitelNed;
         }
         
+        private void WijzigBeschikbaarheidTaalKnoppen(bool IsBtnNederlandsbeschikbaar)
+        {
+            btnNl.IsEnabled = IsBtnNederlandsbeschikbaar;
+            btnEn.IsEnabled = !IsBtnNederlandsbeschikbaar; // ! wil zeggen dat je het onkend bij een boolian, dus false
+                    }
+
+        private void WijzigZichtbaarheidKnoppen(Visibility zichtbaarheid)
+        {
+            btnEn.Visibility = zichtbaarheid;
+            btnNl.Visibility = zichtbaarheid;
+
+        }
         private void btnEn_Click(object sender, RoutedEventArgs e)
         {
             ToonEngelstaligeOpschriften();
+            WijzigBeschikbaarheidTaalKnoppen(true);
         }
 
         private void btnNl_Click(object sender, RoutedEventArgs e)
         {
             ToonNederlandstaligeOpschriften();
+            WijzigBeschikbaarheidTaalKnoppen(false);
         }
         
         private void lstSteden_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -88,16 +91,19 @@ namespace Lievelings.Wpf
             stad = lstSteden.SelectedItem.ToString();
             lblLievelingsStad.Content = $"{beginVanDeZin}{stad}";
 
-            ToonKnoppen();
+           WijzigZichtbaarheidKnoppen(Visibility.Visible);
         }
+
 
         private void wndMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             VulLstSteden();
 
-            VerbergKnoppen();
+            WijzigZichtbaarheidKnoppen(Visibility.Hidden);
 
             Title = TitelNed;
+
+            WijzigBeschikbaarheidTaalKnoppen(false);
         }
     }
 }
